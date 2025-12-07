@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Library Management System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a73e8;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #444;
+            margin-top: 40px;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: #1a73e8;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f1f7ff;
+        }
+
+        /* Buttons */
+        button {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        button[type="submit"] {
+            background: #1a73e8;
+            color: white;
+        }
+
+        button[type="submit"]:hover {
+            background: #155bb5;
+        }
+
+        .btn-delete {
+            background: #e5383b;
+        }
+
+        .btn-delete:hover {
+            background: #b71d25;
+        }
+
+        .btn-return {
+            background: #e0a800;
+            color: white;
+        }
+
+        .btn-return:hover {
+            background: #c48a00;
+        }
+
+        /* Add Book Form */
+        form {
+            margin-top: 15px;
+        }
+
+        input {
+            padding: 10px;
+            margin: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input:focus {
+            border-color: #1a73e8;
+            outline: none;
+        }
+
+        .add-btn {
+            background: #34a853;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .add-btn:hover {
+            background: #1e7d35;
+        }
+
+        /* Layout spacing */
+        .content-container {
+            width: 95%;
+            margin: auto;
+            max-width: 1200px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="content-container">
+    <h1>Library Management System</h1>
+
+    <!-- Display Books -->
+    <h2>All Books</h2>
+    <table>
+        <tr>
+            <th>Book Name</th>
+            <th>Book Author</th>
+            <th>Book Pages</th>
+            <th>Book Price</th>
+            <th>Available</th>
+            <th>Issue</th>
+            <th>Return</th>
+            <th>Delete</th>
+        </tr>
+
+        <% data.forEach(element => { %>
+        <tr>
+            <td><%= element.bookName %></td>
+            <td><%= element.bookAuthor %></td>
+            <td><%= element.bookPages %></td>
+            <td><%= element.bookPrice %></td>
+            <td><%= element.bookState %></td>
+
+            <td>
+                <% if (element.bookState === "Available") { %>
+                <form action="/issue" method="post">
+                    <input type="hidden" name="bookName" value="<%= element.bookName %>">
+                    <button type="submit">Issue</button>
+                </form>
+                <% } %>
+            </td>
+
+            <td>
+                <% if (element.bookState === "Issued") { %>
+                <form action="/return" method="post">
+                    <input type="hidden" name="bookName" value="<%= element.bookName %>">
+                    <button type="submit" class="btn-return">Return</button>
+                </form>
+                <% } %>
+            </td>
+
+            <td>
+                <form action="/delete" method="post">
+                    <input type="hidden" name="bookName" value="<%= element.bookName %>">
+                    <button type="submit" class="btn-delete">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <% }) %>
+    </table>
+
+    <!-- Add Book Form -->
+    <h2>Add Book</h2>
+    <form action="/add" method="post">
+        <input type="text" placeholder="Book Name" name="bookName" required>
+        <input type="text" placeholder="Book Author" name="bookAuthor" required>
+        <input type="number" placeholder="Book Pages" name="bookPages" required>
+        <input type="number" placeholder="Book Price" name="bookPrice" required>
+        <button type="submit" class="add-btn">Add Book</button>
+    </form>
+</div>
+</body>
+</html>
