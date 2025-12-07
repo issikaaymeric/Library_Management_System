@@ -42,6 +42,17 @@ app.post("/issue", (req, res) => {
     res.render("home", { data: books });
 });
 
+// Return Book Route
+app.post("/return", (req, res) => {
+    const requestedBookName = req.body.bookName;
+    books.forEach(book => {
+        if (book.bookName === requestedBookName) {
+            book.bookState = "Available";
+        }
+    });
+    res.render("home", { data: books });
+});
+
 // Delete a book
 app.post("/delete", (req, res) => {
     const requestedBookName = req.body.bookName;
@@ -52,3 +63,4 @@ app.post("/delete", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
+
